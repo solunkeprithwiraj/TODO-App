@@ -87,15 +87,39 @@ The CI/CD pipeline consists of the following stages:
 
 ### Jenkins cannot access Docker
 
-If Jenkins cannot access Docker, ensure that:
-1. The Docker socket is properly mounted
-2. The jenkins user is in the docker group
-3. The proper permissions are set on the Docker socket
+If Jenkins cannot access Docker, here's how to troubleshoot:
 
-You can run:
-```
-docker-compose exec jenkins bash -c "id jenkins && ls -la /var/run/docker.sock"
-```
+1. Check Docker installation in the Jenkins container:
+   ```
+   docker-compose exec jenkins docker --version
+   ```
+
+2. Verify permissions and groups:
+   ```
+   docker-compose exec jenkins bash -c "id jenkins && ls -la /var/run/docker.sock"
+   ```
+
+3. If the Docker socket permissions are incorrect, run the setup script:
+   ```
+   docker-compose exec --user root jenkins /usr/local/bin/docker-setup.sh
+   ```
+
+4. You may need to restart Jenkins after fixing permissions:
+   ```
+   docker-compose restart jenkins
+   ```
+
+5. If issues persist, find the Docker group ID on your host machine:
+   ```
+   stat -c '%g' /var/run/docker.sock
+   ```
+   
+   Then update the DOCKER_GROUP_ID environment variable in docker-compose.yml to match this value.
+
+6. In some environments, you might need to set socket permissions on the host:
+   ```
+   sudo chmod 666 /var/run/docker.sock
+   ```
 
 ### Backend cannot connect to MongoDB
 
