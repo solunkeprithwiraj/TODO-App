@@ -1,0 +1,7 @@
+.navbar{
+    /*box shadow*/
+
+    box-shadow: 2px 2px 10px #bebebe,
+               -10px -10px 30px #ffffff;
+
+}

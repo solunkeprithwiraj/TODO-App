@@ -1,0 +1,164 @@
+/* General Admin Panel Styling */
+.admin-panel {
+  width: 60%;
+  margin: auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+/* Back Button */
+.admin-panel button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.3s;
+  background-color: #007bff;
+  color: white;
+}
+
+.admin-panel button:hover {
+  background-color: #0056b3;
+}
+
+/* Filter Container */
+.filter-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 20px;
+  
+}
+
+
+.filter-container label {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.filter-container .div1 select {
+  padding: 4px 11px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  transition: 0.3s;
+}
+
+.div2 input{
+   border: 1px solid #ccc;
+   border-radius: 5px;
+  margin: 0px;
+  transition: 0.3s;
+}
+
+.filter-container select {
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.filter-container select:focus,
+.filter-container input:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.filter-container input {
+  width: 200px;
+}
+
+/* Table Styling */
+.user-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.user-table th,
+.user-table td {
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align: center;
+  
+}
+.user-table .titles{
+    text-align: left;
+}
+
+.user-table th {
+  background-color: #007bff;
+  color: white;
+}
+
+/* Edit and Delete Buttons */
+.button-edit-delete {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+/* Base button styling */
+button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+
+/* Edit Button */
+button.btn-primary {
+  background-color: #fbc02d;
+  color: #333;
+}
+
+button.btn-primary:hover {
+  background-color: #f9a825;
+}
+
+/* Delete Button */
+button.btn-danger {
+  background-color: #e53935;
+  color: white;
+}
+
+button.btn-danger:hover {
+  background-color: #c62828;
+}
+
+/* Save Button */
+button.btn-save {
+  background-color: #28a745;
+  color: white;
+}
+
+button.btn-save:hover {
+  background-color: #218838;
+}
+
+/* Pagination */
+.pagination {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.pagination button {
+  background-color: #007bff;
+  color: white;
+}
+
+.pagination button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}

@@ -1,0 +1,17 @@
+.welcome{
+    
+    /* text-align: center; */
+margin: 5%;
+
+}
+.text{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    width: 60%;
+    flex-wrap: wrap;
+    text-align: justify;
+    padding: 20px 0 20px 0;
+    border-top: 5px solid red;
+}

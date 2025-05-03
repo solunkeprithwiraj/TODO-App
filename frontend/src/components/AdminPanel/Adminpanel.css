@@ -1,0 +1,185 @@
+.admin-panel-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 900px;
+
+  padding: 20px;
+  margin: auto;
+
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.tasks {
+  display: flex;
+  gap: 3rem;
+  margin: 2rem 0;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  max-width: 800px;
+  padding: 2rem;
+}
+
+.action {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+.button-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+}
+.admin {
+  margin-bottom: 3rem;
+}
+
+.admin-panel ul {
+  padding: 0;
+}
+.heading {
+  margin-bottom: 3vh;
+}
+
+h1{
+   text-align: center;
+  color: #d86a62;
+  font-size: 44px
+}
+h2 {
+  text-align: center;
+  color: #333;
+
+}
+.admin-panel-container h2{
+  border-bottom: 2px solid red;
+  margin: 2%;
+
+}
+
+.div1{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.div1 input{
+   padding: 4px 11px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  transition: 0.3s;
+  margin: 0;
+}
+.div2 select{
+   padding: 4px 11px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  transition: 0.3s;
+}
+
+.user-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background: #fff;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.user-table th,
+.user-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.user-table th {
+  background-color: #007bff;
+  color: white;
+}
+
+.user-table tr:hover {
+  background-color: #f1f1f1;
+}
+
+.btn {
+  padding: 8px 12px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  opacity: 0;
+  animation: fadeInLeft 1.5s ease-out forwards;
+}
+
+.pagination button {
+  padding: 8px 12px;
+  margin: 0 5px;
+  border: none;
+  background: #007bff;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.pagination button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+
+
+/* Animation for fading in and sliding from the left */
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Add animation class to user rows */
+.user-row {
+  opacity: 0;
+  animation: fadeInLeft 0.5s ease-out forwards;
+}
+
+/* Animation delay for each row */
+.user-row:nth-child(1) {
+  animation-delay: 0.2s;
+}
+.user-row:nth-child(2) {
+  animation-delay: 0.4s;
+}
+.user-row:nth-child(3) {
+  animation-delay: 0.6s;
+}
+.user-row:nth-child(4) {
+  animation-delay: 0.8s;
+}
+.user-row:nth-child(5) {
+  animation-delay: 1s;
+}
