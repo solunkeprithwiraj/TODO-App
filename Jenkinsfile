@@ -9,37 +9,39 @@ pipeline {
     stages {
         stage('Setup') {
             steps {
-                bat 'docker --version'
-                bat 'docker-compose --version'
-                // Windows uses named pipes instead of sockets
-                bat 'dir \\\\.\\pipe\\docker_engine || echo "Docker pipe not found"'
+                sh 'docker --version'
+                sh 'docker-compose --version'
+                sh 'ls -la /var/run/docker.sock || echo "Docker socket not found"'
+                sh 'id $(whoami) || echo "Could not get user info"'  // Make sure Jenkins user has docker group
+                sh 'getent group docker || echo "Docker group not found"'  // Verify docker group exists
             }
         }
         
         stage('Checkout') {
             steps {
                 git url: 'https://github.com/solunkeprithwiraj/TODO-App.git', branch: 'main'
+                sh 'chmod +x docker-setup.sh || echo "Script not found"'  // Make sure the script is executable
             }
         }
         
         stage('Build') {
             steps {
                 retry(2) {
-                    bat 'docker-compose -f docker-compose.yml build --no-cache backend frontend'
+                    sh 'docker-compose -f docker-compose.yml build --no-cache backend frontend'
                 }
             }
         }
         
         stage('Test') {
             steps {
-                bat 'echo "Running tests..."'
+                sh 'echo "Running tests..."'
             }
         }
         
         stage('Deploy') {
             steps {
-                bat 'docker-compose -f docker-compose.yml up -d'
-                bat 'echo "Application deployed successfully"'
+                sh 'docker-compose -f docker-compose.yml up -d'
+                sh 'echo "Application deployed successfully"'
             }
         }
     }
@@ -48,13 +50,13 @@ pipeline {
         always {
             script {
                 try {
-                    bat 'docker-compose -f docker-compose.yml down'
+                    sh 'docker-compose -f docker-compose.yml down'
                 } catch (Exception e) {
                     echo "Warning: Failed to bring down docker-compose: ${e.message}"
                 }
                 
                 try {
-                    bat 'docker system prune -f'
+                    sh 'docker system prune -f'
                 } catch (Exception e) {
                     echo "Warning: Failed to run docker system prune: ${e.message}"
                 }
