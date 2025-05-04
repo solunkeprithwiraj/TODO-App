@@ -12,7 +12,7 @@ pipeline {
                 bat 'docker --version'
                 bat 'docker-compose --version'
                 // Windows uses named pipes instead of sockets
-                bat 'dir \\.\pipe\docker_engine || echo "Docker pipe not found"'
+                bat 'dir \\\\.\\pipe\\docker_engine || echo "Docker pipe not found"'
             }
         }
         
