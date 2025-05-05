@@ -4,7 +4,7 @@ const cors = require("cors");
 const connectDB = require("./config/db");
 const userRoutes = require("./routes/userRoutes");
 const taskRoutes = require("./routes/taskRoutes");
-const adminTaskRoutes = require("./routes/adminTaskRoutes")
+const adminTaskRoutes = require("./routes/adminTaskRoutes");
 
 const app = express();
 
@@ -13,13 +13,20 @@ connectDB();
 
 // Middleware
 app.use(express.json());
-app.use(cors({ origin: "http://localhost:3000", methods: ["POST", "GET", "PUT", "DELETE", "PATCH"] }));
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    methods: ["POST", "GET", "PUT", "DELETE", "PATCH"],
+  })
+);
 
 // Routes
 app.use("/api/user", userRoutes);
 app.use("/api", taskRoutes);
 app.use("/api", adminTaskRoutes);
-
+app.get("/api/health", (req, res) => {
+  res.status(200).json({ status: "ok" });
+});
 
 // Server listening
 const port = process.env.PORT || 5000;
