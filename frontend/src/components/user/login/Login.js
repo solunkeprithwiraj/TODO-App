@@ -150,7 +150,7 @@ export default function Login() {
                         <div id="register-link" className="text-right">
                           <div>Not a user? </div>
                           <Link to="/signup" className="text-info">
-                            Register 
+                            Register  test
                           </Link>
                         </div>
                       </form>
