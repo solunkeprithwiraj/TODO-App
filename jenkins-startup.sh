@@ -1,15 +1,24 @@
 #!/bin/bash
 
-# Clone or pull your GitHub repo
-if [ ! -d "your-project" ]; then
-  git clone https://github.com/your-user/your-project.git
+# Configurable variables
+REPO_URL="https://github.com/solunkeprithwiraj/TODO-App.git"
+CLONE_DIR="/var/jenkins_home/todo-app"
+
+# Clone repo if not already cloned
+if [ ! -d "$CLONE_DIR" ]; then
+  echo "Cloning repository..."
+  git clone "$REPO_URL" "$CLONE_DIR"
 else
-  cd your-project
-  git pull origin main
+  echo "Pulling latest changes..."
+  cd "$CLONE_DIR" && git pull origin main
 fi
 
-# Navigate into the project folder
-cd your-project
+# Navigate to the project directory
+cd "$CLONE_DIR"
 
-# Start your Docker containers
+# Optional: stop running containers first
+docker-compose down
+
+# Build and start services
+echo "Starting application using Docker Compose..."
 docker-compose up -d --build
