@@ -1,7 +1,6 @@
 FROM jenkins/jenkins:lts
 
 USER root
-
 # Install Docker CLI inside Jenkins container
 RUN apt-get update && \
     apt-get install -y apt-transport-https ca-certificates curl gnupg lsb-release && \
@@ -12,4 +11,19 @@ RUN apt-get update && \
     apt-get update && \
     apt-get install -y docker-ce-cli
 
+# Create directory for project script and workspace
+RUN mkdir -p /var/jenkins_home/workspace/
+
+# Copy your custom startup script into the image
+COPY start-project.sh /var/jenkins_home/start-project.sh
+
+# Make the script executable 
+RUN chmod +x /var/jenkins_home/start-project.sh
+
+# Copy entrypoint script
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
 USER jenkins
+
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
