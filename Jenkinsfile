@@ -1,51 +1,29 @@
 pipeline {
     agent any
 
-    triggers {
-        githubPush() // Triggers pipeline on every push to GitHub
-    }
-
-    environment {
-        // Define any environment variables you need
-        NODE_ENV = 'production'
-    }
-
     stages {
         stage('Checkout') {
             steps {
-                checkout scm
+                git 'https://github.com/solunkeprithwiraj/TODO-App.git'
             }
         }
 
-        stage('Install Dependencies') {
+        stage('Build and Start Containers') {
             steps {
-                sh 'npm install' 
+                sh 'docker-compose up -d --build'
             }
         }
 
-        stage('Run Tests') {
+        stage('Run Backend Tests') {
             steps {
-                sh 'npm test' // Replace with your test command
+                sh 'docker-compose exec backend npm test'
             }
         }
 
-        stage('Build') {
+        stage('Cleanup') {
             steps {
-                sh 'npm run build' // or your build command
+                sh 'docker-compose down'
             }
-        }
-
-        stage('Deploy') {
-            steps {
-                echo 'Deploy stage here (optional)'
-                
-            }
-        }
-    }
-
-    post {
-        always {
-            echo 'Job finished!'
         }
     }
 }
