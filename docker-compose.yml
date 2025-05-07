@@ -14,7 +14,7 @@ services:
       - PASS=xgfjvsfbqswyimrq
       - NODE_ENV=development
     volumes:
-      - ./backend:/app
+      - ./backend
       - /app/node_modules
     depends_on:
       - mongo
