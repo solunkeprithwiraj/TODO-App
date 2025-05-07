@@ -4,7 +4,8 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/solunkeprithwiraj/TODO-App.git'
+
+                git branch: 'main', url: 'https://github.com/solunkeprithwiraj/TODO-App.git'            
             }
         }
 
