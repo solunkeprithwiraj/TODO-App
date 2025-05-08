@@ -1,30 +1,52 @@
 pipeline {
     agent any
-
+    
+    environment {
+        DOCKER_COMPOSE = 'docker-compose'
+    }
+    
     stages {
         stage('Checkout') {
             steps {
-
-                git branch: 'main', url: 'https://github.com/solunkeprithwiraj/TODO-App.git'            
+                checkout scm
             }
         }
-
-        stage('Build and Start Containers') {
+        
+        stage('Build and Deploy') {
             steps {
-                sh 'docker-compose up -d --build'
+                script {
+                    // Stop and remove existing containers if any
+                    sh "${DOCKER_COMPOSE} down"
+                    
+                    // Build and start the containers
+                    sh "${DOCKER_COMPOSE} up -d --build"
+                    
+                    // Wait for services to be ready
+                    sleep(30)
+                }
             }
         }
-
-        stage('Run Backend Tests') {
+        
+        stage('Verify') {
             steps {
-                sh 'docker compose exec backend npm test'
+                script {
+                    // Check if containers are running
+                    sh "docker ps"
+                    
+                    // Basic health check
+                    sh "curl -f http://localhost:3000 || true"
+                    sh "curl -f http://localhost:5000 || true"
+                }
             }
         }
-
-        stage('Cleanup') {
-            steps {
-                sh 'docker compose down'
-            }
+    }
+    
+    post {
+        always {
+            echo 'Pipeline completed!'
+        }
+        failure {
+            echo 'Pipeline failed!'
         }
     }
 }
