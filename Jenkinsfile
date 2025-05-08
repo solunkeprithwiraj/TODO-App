@@ -22,7 +22,7 @@ pipeline {
                     sh "${DOCKER_COMPOSE} up -d --build"
                     
                     // Wait for services to be ready
-                    sleep(30)
+                    sleep(30)   
                 }
             }
         }
