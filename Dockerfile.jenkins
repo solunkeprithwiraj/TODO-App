@@ -19,7 +19,6 @@ RUN curl -L "https://github.com/docker/compose/releases/download/v2.20.3/docker-
     chmod +x /usr/local/bin/docker-compose
 
 # Add jenkins user to docker group and set permissions
-RUN usermod -aG docker jenkins && \
-    
+RUN usermod -aG docker jenkins
 
 USER jenkins 
