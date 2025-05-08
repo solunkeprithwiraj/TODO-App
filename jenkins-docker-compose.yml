@@ -15,6 +15,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
       - DOCKER_HOST=unix:///var/run/docker.sock
+      - GIT_SSL_NO_VERIFY=true
     privileged: true
     networks:
       - jenkins-network
