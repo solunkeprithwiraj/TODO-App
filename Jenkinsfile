@@ -5,18 +5,17 @@ pipeline {
         DOCKER_COMPOSE = 'docker-compose'
     }
     
-    stages {
-        stage('Checkout') {
-            steps {
-              
-              dir('TODO-App'){
-                    checkout([
-                    $class: 'GitSCM',
-                    branches: [[name: '*/main']],
-                    userRemoteConfigs: [[url: 'https://github.com/solunkeprithwiraj/TODO-App.git']],
-                    extensions: [[$class: 'CleanBeforeCheckout']]
-                ])
-            }
+        stages {
+            stage('Checkout') {
+                steps {
+                    dir('TODO-App') {
+                        checkout([
+                            $class: 'GitSCM',
+                            branches: [[name: '*/main']],
+                            userRemoteConfigs: [[url: 'https://github.com/solunkeprithwiraj/TODO-App.git']],
+                            extensions: [[$class: 'CleanBeforeCheckout']]
+                        ])
+                    }
             }
         }
         
