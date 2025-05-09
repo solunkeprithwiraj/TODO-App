@@ -8,15 +8,15 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Clean workspace before checkout
-                cleanWs()
-                // Checkout with specific branch
-                checkout([
+              
+              dir('TODO-App'){
+                    checkout([
                     $class: 'GitSCM',
                     branches: [[name: '*/main']],
                     userRemoteConfigs: [[url: 'https://github.com/solunkeprithwiraj/TODO-App.git']],
                     extensions: [[$class: 'CleanBeforeCheckout']]
                 ])
+            }
             }
         }
         
