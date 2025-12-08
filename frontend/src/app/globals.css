@@ -1,0 +1,209 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* New Color Palette from Color Hunt */
+    /* #050E3C - Dark Navy (Primary Dark) */
+    /* #002455 - Medium Navy (Primary) */
+    /* #DC0000 - Dark Red (Danger/Admin) */
+    /* #FF3838 - Bright Red (Error/Delete) */
+    
+    --color-primary-dark: #050E3C;
+    --color-primary: #002455;
+    --color-primary-light: #003d7a;
+    --color-primary-lighter: #0056a3;
+    
+    --color-danger-dark: #DC0000;
+    --color-danger: #FF3838;
+    --color-danger-light: #ff5c5c;
+    --color-danger-lighter: #ff8080;
+
+    /* Neutral Colors */
+    --color-gray-50: #f9fafb;
+    --color-gray-100: #f3f4f6;
+    --color-gray-200: #e5e7eb;
+    --color-gray-300: #d1d5db;
+    --color-gray-400: #9ca3af;
+    --color-gray-500: #6b7280;
+    --color-gray-600: #4b5563;
+    --color-gray-700: #374151;
+    --color-gray-800: #1f2937;
+    --color-gray-900: #111827;
+
+    /* Semantic Colors */
+    --color-success: #10b981;
+    --color-error: #FF3838;
+    --color-warning: #f59e0b;
+    --color-info: #002455;
+
+    /* Background Colors (tints from the palette) */
+    --bg-primary: #f4f6fb; /* soft tint of navy */
+    --bg-secondary: #e9edf5; /* slightly stronger tint */
+    --bg-tertiary: #dfe6f0; /* card/section contrast */
+
+    /* Text Colors */
+    --text-primary: #050E3C;
+    --text-secondary: #4b5563;
+    --text-tertiary: #6b7280;
+    --text-inverse: #ffffff;
+
+    /* Border Colors */
+    --border-light: #e5e7eb;
+    --border-medium: #d1d5db;
+    --border-dark: #9ca3af;
+  }
+
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+  }
+
+  code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+      monospace;
+  }
+}
+
+@layer components {
+  /* Button Styles - New Color Theme */
+  .btn-primary {
+    background-color: #002455;
+    @apply px-6 py-3 text-white font-semibold rounded-lg shadow-sm hover:shadow-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2;
+  }
+  .btn-primary:hover {
+    background-color: #003d7a;
+  }
+  .btn-primary:focus {
+    --tw-ring-color: #002455;
+  }
+
+  .btn-secondary {
+    @apply px-6 py-3 bg-white text-gray-700 font-semibold rounded-lg shadow-sm hover:shadow-md border border-gray-200 hover:border-gray-300 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2;
+  }
+
+  .btn-danger {
+    background-color: #FF3838;
+    @apply px-6 py-3 text-white font-semibold rounded-lg shadow-sm hover:shadow-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2;
+  }
+  .btn-danger:hover {
+    background-color: #ff5c5c;
+  }
+  .btn-danger:focus {
+    --tw-ring-color: #FF3838;
+  }
+
+  /* Card Styles - Clean and Minimal */
+  .card {
+    @apply bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-200 border border-gray-100;
+  }
+
+  .card-elevated {
+    @apply bg-white rounded-xl shadow-md p-6 border border-gray-200;
+  }
+
+  /* Input Styles - Modern and Clean */
+  .input-field {
+    @apply w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 transition-all duration-200 bg-white text-gray-900;
+  }
+  .input-field:focus {
+    --tw-ring-color: #002455;
+    border-color: #002455;
+  }
+
+  .input-field-error {
+    @apply w-full px-4 py-3 border-2 rounded-lg focus:outline-none focus:ring-2 transition-all duration-200 text-gray-900;
+    border-color: #FF3838;
+    background-color: #fff5f5;
+  }
+  .input-field-error:focus {
+    --tw-ring-color: #FF3838;
+  }
+
+  /* Text Styles */
+  .gradient-text {
+    color: #050E3C;
+    @apply font-extrabold;
+  }
+
+  .gradient-text-accent {
+    color: #002455;
+    @apply font-extrabold;
+  }
+
+  /* Background helpers */
+  .bg-surface {
+    background-color: var(--bg-primary);
+  }
+
+  .bg-surface-muted {
+    background-color: var(--bg-secondary);
+  }
+
+  .bg-surface-contrast {
+    background-color: var(--bg-tertiary);
+  }
+
+  .bg-gradient-primary {
+    background-color: var(--bg-primary);
+  }
+
+  .bg-gradient-card {
+    background-color: var(--bg-secondary);
+  }
+}
+
+@layer utilities {
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slide-in {
+    from {
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes scale-in {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .animate-fade-in {
+    animation: fade-in 0.6s ease-out;
+  }
+
+  .animate-slide-in {
+    animation: slide-in 0.5s ease-out;
+  }
+
+  .animate-scale-in {
+    animation: scale-in 0.4s ease-out;
+  }
+}
+

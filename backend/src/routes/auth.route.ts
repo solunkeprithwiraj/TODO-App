@@ -1,0 +1,242 @@
+import { Router } from "express";
+import AuthController from "../controller/auth/auth.controller";
+import {
+  validateLogin,
+  validateLogout,
+  validateRefreshToken,
+  validateRegister,
+} from "../validators/auth.validator";
+import { authenticate } from "../middleware/auth.middleware";
+
+const router = Router();
+const authController = new AuthController();
+
+/**
+ * @openapi
+ * /auth/register:
+ *   post:
+ *     tags:
+ *       - Auth
+ *     summary: Register a new user
+ *     description: Registers a new user with the given email and password
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/RegisterData'
+ *     responses:
+ *       201:
+ *         description: User created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: string
+ *                       description: The ID of the user
+ *                     email:
+ *                       type: string
+ *                       description: The email of the user
+ *                     createdAt:
+ *                       type: string
+ *                       description: The date and time the user was created
+ *                     updatedAt:
+ *                       type: string
+ *                       description: The date and time the user was last updated
+ *       400:
+ *         description: Bad request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: The error message
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: The error message
+ */
+router.post("/register", validateRegister, authController.register);
+
+/**
+ * @openapi
+ * /auth/login:
+ *   post:
+ *     tags:
+ *       - Auth
+ *     summary: Login a user
+ *     description: Logs in a user with their email and password
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/LoginData'
+ *     responses:
+ *       200:
+ *         description: User logged in successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: string
+ *                       description: The ID of the user
+ *                     email:
+ *                       type: string
+ *                       description: The email of the user
+ *                     createdAt:
+ *                       type: string
+ *                       description: The date and time the user was created
+ *                     updatedAt:
+ *                       type: string
+ *                       description: The date and time the user was last updated
+ *                 token:
+ *                   type: string
+ *                   description: The JWT token for the user
+ *       401:
+ *         description: Invalid credentials
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: The error message
+ *       400:
+ *         description: Bad request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: The error message
+ */
+router.post("/login", validateLogin, authController.login);
+
+/**
+ * @openapi
+ * /auth/logout:
+ *   security:
+ *     - bearerAuth: []
+ *   post:
+ *     tags:
+ *       - Auth
+ *     summary: Logout a user
+ *     description: Logs out a user by invalidating their token
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               userId:
+ *                 type: string
+ *                 description: The ID of the user
+ *     responses:
+ *       200:
+ *         description: User logged out successfully
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: The error message
+ *       400:
+ *         description: Bad request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: The error message when userId is not provided
+ */
+router.post("/logout", validateLogout, authenticate, authController.logout);
+
+/**
+ * @openapi
+ * /auth/refresh-token:
+ *   security:
+ *     - bearerAuth: []
+ *   post:
+ *     tags:
+ *       - Auth
+ *     summary: Refresh a token
+ *     description: Refreshes a token by generating a new one
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               refreshToken:
+ *                 type: string
+ *                 description: The refresh token
+ *     responses:
+ *       200:
+ *         description: Token refreshed successfully
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: The error message
+ *       400:
+ *         description: Bad request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: The error message when refreshToken is not provided
+ *                   required:
+ *                     - refreshToken
+ */
+router.post(
+  "/refresh-token",
+  validateRefreshToken,
+  authenticate,
+  authController.refreshToken
+);
+
+export default router;

@@ -10,10 +10,11 @@ RUN npm install
 COPY . .
 
 # Set environment variables
-ENV REACT_APP_API_URL=http://localhost:5000
+ENV NEXT_PUBLIC_API_URL=http://localhost:5000
+ENV NODE_ENV=development
 
 # Expose port 3000
 EXPOSE 3000
 
 # Start the application in development mode
-CMD ["npm", "start"]
+CMD ["npm", "run", "dev"]

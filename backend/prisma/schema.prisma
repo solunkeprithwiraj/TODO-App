@@ -1,0 +1,417 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model task {
+  id          String    @id @default(uuid())
+  title       String
+  description String
+  completed   Boolean   @default(false)
+  userId      String
+  user        User      @relation("UserTasks", fields: [userId], references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+  isDeleted   Boolean   @default(false)
+}
+
+// ====================== Enums =========================
+
+enum UserRole {
+  CLIENT
+  ADMIN
+}
+
+enum Plan {
+  FREE
+  PRO
+  ENTERPRISE
+}
+
+enum OrgRole {
+  ADMIN
+  MANAGER
+  DEVELOPER
+  VIEWER
+}
+
+enum WorkItemStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  IN_REVIEW
+  TESTING
+  DONE
+  AT_RISK
+}
+
+enum WorkItemType {
+  FEATURE
+  BUG
+  TASK
+  CHORE
+}
+
+enum InitiativeStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  DONE
+  ON_HOLD
+}
+
+enum PRState {
+  OPEN
+  CLOSED
+  MERGED
+}
+
+enum DeploymentStatus {
+  SUCCESS
+  FAILURE
+  IN_PROGRESS
+}
+
+enum Environment {
+  DEV
+  STAGING
+  PRODUCTION
+}
+
+enum EventSource {
+  GITHUB
+  SLACK
+  CICD
+  MANUAL
+  SYSTEM
+}
+
+enum AiSummaryType {
+  PR_SUMMARY
+  FEATURE_SUMMARY
+  RELEASE_NOTES
+}
+
+enum AiInsightType {
+  RISK
+  PREDICTION
+  TREND
+}
+
+enum WorkItemLinkEntityType {
+  PR
+  COMMIT
+  BRANCH
+  DEPLOY
+}
+
+// ====================== Core Models =========================
+
+model Organization {
+  id        String   @id @default(uuid())
+  name      String
+  plan      Plan     @default(FREE)
+  createdAt DateTime @default(now())
+
+  members  OrgMember[]
+  teams    Team[]
+  projects Project[]
+  events   Event[]
+
+  @@map("organizations")
+}
+
+model User {
+  id                    String    @id @default(uuid())
+  email                 String    @unique
+  name                  String?
+  role                  UserRole  @default(CLIENT)
+  password              String?
+  avatarUrl             String?
+  accessToken           String?
+  refreshToken          String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  tasks         task[]       @relation("UserTasks")
+  orgMembers    OrgMember[]
+  teamMembers   TeamMember[]
+  createdItems  WorkItem[]   @relation("CreatedBy")
+  assignedItems WorkItem[]   @relation("Assignee")
+  deployments   Deployment[] @relation("DeploymentTriggeredBy")
+
+  @@index([email])
+  @@index([createdAt])
+  @@index([updatedAt])
+  @@map("users")
+}
+
+model OrgMember {
+  id        String   @id @default(uuid())
+  orgId     String
+  userId    String
+  role      OrgRole  @default(DEVELOPER)
+  createdAt DateTime @default(now())
+
+  organization Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([orgId, userId])
+  @@map("org_members")
+}
+
+model Team {
+  id        String   @id @default(uuid())
+  orgId     String
+  name      String
+  createdAt DateTime @default(now())
+
+  organization Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  members      TeamMember[]
+  projects     Project[]    @relation("ProjectTeams")
+
+  @@map("teams")
+}
+
+model TeamMember {
+  id     String @id @default(uuid())
+  teamId String
+  userId String
+
+  team Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([teamId, userId])
+  @@map("team_members")
+}
+
+// ====================== Projects & Repos =========================
+
+model Project {
+  id          String   @id @default(uuid())
+  orgId       String
+  name        String
+  description String?
+  createdAt   DateTime @default(now())
+
+  organization Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  repositories Repository[]
+  workItems    WorkItem[]
+  initiatives  Initiative[]
+  events       Event[]
+  aiInsights   AiInsight[]
+
+  teams Team[] @relation("ProjectTeams")
+
+  @@index([orgId])
+  @@map("projects")
+}
+
+model Repository {
+  id             String   @id @default(uuid())
+  projectId      String
+  githubRepoId   BigInt   @unique
+  name           String
+  fullName       String // org/repo
+  defaultBranch  String?
+  installationId BigInt // GitHub App installation id
+  createdAt      DateTime @default(now())
+
+  project      Project       @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  pullRequests PullRequest[]
+  commits      Commit[]
+  deployments  Deployment[]
+
+  @@index([projectId])
+  @@map("repositories")
+}
+
+// ====================== Work Items & Initiatives =========================
+
+model WorkItem {
+  id              String         @id @default(uuid())
+  projectId       String
+  initiativeId    String?
+  title           String
+  description     String?
+  status          WorkItemStatus @default(NOT_STARTED)
+  type            WorkItemType   @default(TASK)
+  assigneeId      String?
+  createdById     String
+  autoCreated     Boolean        @default(true)
+  progress        Int            @default(0) // 0-100
+  confidenceScore Float? // mapping confidence
+  startedAt       DateTime?
+  completedAt     DateTime?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  project    Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  initiative Initiative? @relation(fields: [initiativeId], references: [id], onDelete: SetNull)
+  assignee   User?       @relation("Assignee", fields: [assigneeId], references: [id], onDelete: SetNull)
+  createdBy  User        @relation("CreatedBy", fields: [createdById], references: [id], onDelete: Restrict)
+
+  pullRequests PullRequest[]
+  commits      Commit[]
+  links        WorkItemLink[]
+  aiSummaries  AiSummary[]
+
+  @@index([projectId])
+  @@index([initiativeId])
+  @@index([assigneeId])
+  @@map("work_items")
+}
+
+model Initiative {
+  id          String           @id @default(uuid())
+  projectId   String
+  title       String
+  description String?
+  status      InitiativeStatus @default(NOT_STARTED)
+  startDate   DateTime?
+  endDate     DateTime?
+  progress    Int              @default(0)
+  createdAt   DateTime         @default(now())
+
+  project   Project    @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  workItems WorkItem[]
+
+  @@index([projectId])
+  @@map("initiatives")
+}
+
+// ====================== Git Objects =========================
+
+model PullRequest {
+  id           String    @id @default(uuid())
+  repositoryId String
+  workItemId   String?
+  number       Int
+  title        String
+  state        PRState   @default(OPEN)
+  author       String?
+  branch       String?
+  merged       Boolean   @default(false)
+  mergedAt     DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  repository Repository @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
+  workItem   WorkItem?  @relation(fields: [workItemId], references: [id], onDelete: SetNull)
+
+  @@unique([repositoryId, number])
+  @@index([repositoryId])
+  @@index([workItemId])
+  @@map("pull_requests")
+}
+
+model Commit {
+  id           String   @id @default(uuid())
+  repositoryId String
+  workItemId   String?
+  sha          String
+  message      String
+  authorName   String?
+  authorEmail  String?
+  timestamp    DateTime
+
+  repository Repository @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
+  workItem   WorkItem?  @relation(fields: [workItemId], references: [id], onDelete: SetNull)
+
+  @@unique([repositoryId, sha])
+  @@index([repositoryId])
+  @@index([workItemId])
+  @@map("commits")
+}
+
+model Deployment {
+  id            String           @id @default(uuid())
+  repositoryId  String
+  environment   Environment
+  sha           String
+  status        DeploymentStatus
+  url           String?
+  triggeredById String?
+  createdAt     DateTime         @default(now())
+
+  repository  Repository @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
+  triggeredBy User?      @relation("DeploymentTriggeredBy", fields: [triggeredById], references: [id], onDelete: SetNull)
+
+  @@index([repositoryId])
+  @@index([triggeredById])
+  @@map("deployments")
+}
+
+// Generic linking between WorkItem and git entities (optional but flexible)
+model WorkItemLink {
+  id         String                 @id @default(uuid())
+  workItemId String
+  entityType WorkItemLinkEntityType
+  entityId   String
+  createdAt  DateTime               @default(now())
+
+  workItem WorkItem @relation(fields: [workItemId], references: [id], onDelete: Cascade)
+
+  @@index([workItemId])
+  @@index([entityType, entityId])
+  @@map("work_item_links")
+}
+
+// ====================== Events & AI =========================
+
+model Event {
+  id        String      @id @default(uuid())
+  orgId     String
+  projectId String
+  type      String
+  source    EventSource
+  payload   Json
+  processed Boolean     @default(false)
+  createdAt DateTime    @default(now())
+
+  organization Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  project      Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([orgId])
+  @@index([projectId])
+  @@index([processed])
+  @@map("events")
+}
+
+model AiSummary {
+  id          String        @id @default(uuid())
+  workItemId  String
+  summaryType AiSummaryType
+  content     String
+  createdAt   DateTime      @default(now())
+
+  workItem WorkItem @relation(fields: [workItemId], references: [id], onDelete: Cascade)
+
+  @@index([workItemId])
+  @@map("ai_summaries")
+}
+
+model AiInsight {
+  id          String        @id @default(uuid())
+  projectId   String
+  insightType AiInsightType
+  content     String
+  score       Float?
+  createdAt   DateTime      @default(now())
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+  @@map("ai_insights")
+}
