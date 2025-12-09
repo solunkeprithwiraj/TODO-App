@@ -13,7 +13,7 @@ export default function Navbar() {
 
   const handleLogout = () => {
     logout();
-    router.push("/login");
+    router.push("/auth?view=login");
   };
 
   return (
@@ -86,13 +86,13 @@ export default function Navbar() {
                     {user && (
                       <div className="px-4 py-3 border-b border-gray-200">
                         <p className="text-sm font-semibold text-gray-900">
-                          {user.name}
+                          {user.username}
                         </p>
                         <p className="text-xs text-gray-500 mt-1">
                           {user.email}
                         </p>
                         <span className="inline-block mt-2 px-2 py-1 text-xs font-semibold rounded-full bg-navy text-white">
-                          {user.isAdmin ? "Admin" : "User"}
+                          {user.role === "ADMIN" ? "Admin" : "User"}
                         </span>
                       </div>
                     )}
@@ -104,7 +104,7 @@ export default function Navbar() {
                       Dashboard
                     </Link>
                     <Link
-                      href={user ? "/" : "/signup"}
+                      href={user ? "/" : "/auth?view=signup"}
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
                       onClick={() => setIsDropdownOpen(false)}
                     >
@@ -112,7 +112,7 @@ export default function Navbar() {
                     </Link>
                     <hr className="my-2 border-gray-200" />
                     <Link
-                      href="/login"
+                      href="/auth?view=login"
                       onClick={() => {
                         handleLogout();
                         setIsDropdownOpen(false);
@@ -205,14 +205,14 @@ export default function Navbar() {
                   Dashboard
                 </Link>
                 <Link
-                  href={user ? "/" : "/signup"}
+                  href={user ? "/" : "/auth?view=signup"}
                   className="block px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:text-navy hover:bg-gray-50 transition-colors"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {user ? "Profile" : "Sign Up"}
                 </Link>
                 <Link
-                  href="/login"
+                  href="/auth?view=login"
                   onClick={() => {
                     handleLogout();
                     setIsMenuOpen(false);

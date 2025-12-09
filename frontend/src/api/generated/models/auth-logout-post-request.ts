@@ -18,6 +18,6 @@ export interface AuthLogoutPostRequest {
     /**
      * The ID of the user
      */
-    'userId'?: string;
+    'userId': string;
 }
 

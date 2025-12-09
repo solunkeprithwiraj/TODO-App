@@ -24,7 +24,7 @@ const authController = new AuthController();
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/RegisterData'
+ *             $ref: '#/components/schemas/AuthRegisterPostRequest'
  *     responses:
  *       201:
  *         description: User created successfully
@@ -33,21 +33,7 @@ const authController = new AuthController();
  *             schema:
  *               type: object
  *               properties:
- *                 user:
- *                   type: object
- *                   properties:
- *                     id:
- *                       type: string
- *                       description: The ID of the user
- *                     email:
- *                       type: string
- *                       description: The email of the user
- *                     createdAt:
- *                       type: string
- *                       description: The date and time the user was created
- *                     updatedAt:
- *                       type: string
- *                       description: The date and time the user was last updated
+ *                 $ref: '#/components/schemas/AuthRegisterResponse'
  *       400:
  *         description: Bad request
  *         content:
@@ -84,7 +70,7 @@ router.post("/register", validateRegister, authController.register);
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/LoginData'
+ *             $ref: '#/components/schemas/AuthLoginPostRequest'
  *     responses:
  *       200:
  *         description: User logged in successfully
@@ -93,24 +79,7 @@ router.post("/register", validateRegister, authController.register);
  *             schema:
  *               type: object
  *               properties:
- *                 user:
- *                   type: object
- *                   properties:
- *                     id:
- *                       type: string
- *                       description: The ID of the user
- *                     email:
- *                       type: string
- *                       description: The email of the user
- *                     createdAt:
- *                       type: string
- *                       description: The date and time the user was created
- *                     updatedAt:
- *                       type: string
- *                       description: The date and time the user was last updated
- *                 token:
- *                   type: string
- *                   description: The JWT token for the user
+ *                 $ref: '#/components/schemas/AuthLoginResponse'
  *       401:
  *         description: Invalid credentials
  *       500:
@@ -153,9 +122,7 @@ router.post("/login", validateLogin, authController.login);
  *           schema:
  *             type: object
  *             properties:
- *               userId:
- *                 type: string
- *                 description: The ID of the user
+ *               $ref: '#/components/schemas/AuthLogoutPostRequest'
  *     responses:
  *       200:
  *         description: User logged out successfully
@@ -201,9 +168,7 @@ router.post("/logout", validateLogout, authenticate, authController.logout);
  *           schema:
  *             type: object
  *             properties:
- *               refreshToken:
- *                 type: string
- *                 description: The refresh token
+ *               $ref: '#/components/schemas/AuthRefreshTokenPostRequest'
  *     responses:
  *       200:
  *         description: Token refreshed successfully

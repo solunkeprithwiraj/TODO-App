@@ -16,11 +16,11 @@
 
 export interface AuthLoginPostRequest {
     /**
-     * The user\'s email address
+     * The email of the user
      */
     'email': string;
     /**
-     * The user\'s password
+     * The password of the user
      */
     'password': string;
 }

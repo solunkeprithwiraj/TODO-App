@@ -4,8 +4,8 @@ import jwt from "jsonwebtoken";
 import { errorResponse, successResponse } from "../../utils/response.util";
 import {
   AuthTokenPayload,
-  RegisterData,
-  LoginData,
+  AuthRegisterPostRequest,
+  AuthLoginPostRequest,
 } from "../../interfaces/auth.interface";
 import { logger } from "../../utils/logger";
 
@@ -15,7 +15,7 @@ export class AuthService {
   private JWT_SECRET: string =
     process.env.JWT_SECRET || "your-secret-key-change-in-production";
 
-  async register(data: RegisterData) {
+  async register(data: AuthRegisterPostRequest) {
     const { email, password, name } = data;
     logger.info("Registering user", data);
     const existingUser = await this.prisma.user.findUnique({
@@ -51,7 +51,7 @@ export class AuthService {
     return successResponse("register successful", userWithoutPassword);
   }
 
-  async login(data: LoginData) {
+  async login(data: AuthLoginPostRequest) {
     const { email, password } = data;
     const user = await this.prisma.user.findUnique({
       where: { email },

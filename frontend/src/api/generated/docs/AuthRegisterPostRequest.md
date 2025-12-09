@@ -5,9 +5,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**name** | **string** | The name of the user | [optional] [default to undefined]
-**email** | **string** |  | [optional] [default to undefined]
-**password** | **string** |  | [optional] [default to undefined]
+**email** | **string** | The email of the user | [default to undefined]
+**password** | **string** | The password of the user | [default to undefined]
+**name** | **string** | The user\&#39;s name of the user | [default to undefined]
 
 ## Example
 
@@ -15,9 +15,9 @@ Name | Type | Description | Notes
 import { AuthRegisterPostRequest } from './api';
 
 const instance: AuthRegisterPostRequest = {
-    name,
     email,
     password,
+    name,
 };
 ```
 

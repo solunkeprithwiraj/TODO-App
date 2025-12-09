@@ -1,19 +1,19 @@
-# AuthRegisterPost201Response
+# AuthTokenPayload
 
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**user** | [**AuthRegisterPost201ResponseUser**](AuthRegisterPost201ResponseUser.md) |  | [optional] [default to undefined]
+**userId** | **string** | The ID of the user | [default to undefined]
 
 ## Example
 
 ```typescript
-import { AuthRegisterPost201Response } from './api';
+import { AuthTokenPayload } from './api';
 
-const instance: AuthRegisterPost201Response = {
-    user,
+const instance: AuthTokenPayload = {
+    userId,
 };
 ```
 

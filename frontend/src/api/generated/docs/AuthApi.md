@@ -10,7 +10,7 @@ All URIs are relative to *http://localhost:5000/api/v1*
 |[**authRegisterPost**](#authregisterpost) | **POST** /auth/register | Register a new user|
 
 # **authLoginPost**
-> AuthLoginPost200Response authLoginPost(authLoginPostRequest)
+> object authLoginPost(authLoginPostRequest)
 
 Logs in a user with their email and password
 
@@ -42,7 +42,7 @@ const { status, data } = await apiInstance.authLoginPost(
 
 ### Return type
 
-**AuthLoginPost200Response**
+**object**
 
 ### Authorization
 
@@ -65,7 +65,7 @@ const { status, data } = await apiInstance.authLoginPost(
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **authLogoutPost**
-> authLogoutPost(authLogoutPostRequest)
+> authLogoutPost(body)
 
 Logs out a user by invalidating their token
 
@@ -74,17 +74,16 @@ Logs out a user by invalidating their token
 ```typescript
 import {
     AuthApi,
-    Configuration,
-    AuthLogoutPostRequest
+    Configuration
 } from './api';
 
 const configuration = new Configuration();
 const apiInstance = new AuthApi(configuration);
 
-let authLogoutPostRequest: AuthLogoutPostRequest; //
+let body: object; //
 
 const { status, data } = await apiInstance.authLogoutPost(
-    authLogoutPostRequest
+    body
 );
 ```
 
@@ -92,7 +91,7 @@ const { status, data } = await apiInstance.authLogoutPost(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **authLogoutPostRequest** | **AuthLogoutPostRequest**|  | |
+| **body** | **object**|  | |
 
 
 ### Return type
@@ -120,7 +119,7 @@ void (empty response body)
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **authRefreshTokenPost**
-> authRefreshTokenPost(authRefreshTokenPostRequest)
+> authRefreshTokenPost(body)
 
 Refreshes a token by generating a new one
 
@@ -129,17 +128,16 @@ Refreshes a token by generating a new one
 ```typescript
 import {
     AuthApi,
-    Configuration,
-    AuthRefreshTokenPostRequest
+    Configuration
 } from './api';
 
 const configuration = new Configuration();
 const apiInstance = new AuthApi(configuration);
 
-let authRefreshTokenPostRequest: AuthRefreshTokenPostRequest; //
+let body: object; //
 
 const { status, data } = await apiInstance.authRefreshTokenPost(
-    authRefreshTokenPostRequest
+    body
 );
 ```
 
@@ -147,7 +145,7 @@ const { status, data } = await apiInstance.authRefreshTokenPost(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **authRefreshTokenPostRequest** | **AuthRefreshTokenPostRequest**|  | |
+| **body** | **object**|  | |
 
 
 ### Return type
@@ -175,7 +173,7 @@ void (empty response body)
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **authRegisterPost**
-> AuthRegisterPost201Response authRegisterPost(authRegisterPostRequest)
+> object authRegisterPost(authRegisterPostRequest)
 
 Registers a new user with the given email and password
 
@@ -207,7 +205,7 @@ const { status, data } = await apiInstance.authRegisterPost(
 
 ### Return type
 
-**AuthRegisterPost201Response**
+**object**
 
 ### Authorization
 

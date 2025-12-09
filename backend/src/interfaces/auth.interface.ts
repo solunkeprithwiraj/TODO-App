@@ -1,8 +1,10 @@
+import { User, UserRole } from "@prisma/client";
+
 /**
  * @openapi
  * components:
  *   schemas:
- *     RegisterData:
+ *     AuthRegisterPostRequest:
  *       type: object
  *       required:
  *         - email
@@ -22,20 +24,18 @@
  *           example: password123
  *         name:
  *           type: string
- *           description: The name of the user
+ *           description: The user's name of the user
  *           example: John Doe
  */
 
-import { User } from "@prisma/client";
-
 /**
- * @interface RegisterData
- * @description The data required to register a user
+ * @interface AuthRegisterPostRequest
+ * @description The request for the registration
  * @property {string} email - The email of the user
  * @property {string} password - The password of the user
- * @property {string} name - The name of the user
+ * @property {string} name - The user's name of the user
  */
-export interface RegisterData {
+export interface AuthRegisterPostRequest {
   email: string;
   password: string;
   name: string;
@@ -45,7 +45,22 @@ export interface RegisterData {
  * @openapi
  * components:
  *   schemas:
- *     LoginData:
+ *     AuthRegisterResponse:
+ *       allOf:
+ *         - $ref: "#/components/schemas/UserInterface"
+ */
+
+/**
+ * @typedef AuthRegisterResponse
+ */
+export type AuthRegisterResponse = UserInterface;
+
+
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     AuthLoginPostRequest:
  *       type: object
  *       required:
  *         - email
@@ -63,14 +78,125 @@ export interface RegisterData {
  *           example: password123
  */
 /**
- * @interface LoginData
+ * @interface AuthLoginPostRequest
  * @description The data required to login a user
  * @property {string} email - The email of the user
  * @property {string} password - The password of the user
  */
-export interface LoginData {
+export interface AuthLoginPostRequest {
   email: string;
   password: string;
+}
+
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     UserInterface:
+ *       type: object
+ *       required:
+ *         - id
+ *         - email
+ *         - name
+ *         - role
+ *         - accessToken
+ *         - refreshToken
+ *         - createdAt
+ *         - updatedAt
+ *       properties:
+ *         id:
+ *           type: string
+ *           description: The ID of the user
+ *           example: "507f1f77bcf86cd799439011"
+ *         email:
+ *           type: string
+ *           description: The email of the user
+ *           example: "user@example.com"
+ *         name:
+ *           type: string
+ *           description: The user's name of the user
+ *           example: "john_doe"
+ *         role:
+ *           type: string
+ *           description: The role of the user
+ *           example: "ADMIN"
+ *         accessToken:
+ *           type: string
+ *           description: The access token of the user
+ *           example: "1234567890"
+ *         refreshToken:
+ *           type: string
+ *           description: The refresh token of the user
+ *           example: "1234567890"
+ *         createdAt:
+ *           type: string
+ *           description: The date and time the user was created
+ *           example: "2021-01-01T00:00:00.000Z"
+ *         updatedAt:
+ *           type: string
+ *           description: The date and time the user was last updated
+ *           example: "2021-01-01T00:00:00.000Z"
+ */
+/**
+ * @interface UserInterface
+ * @description The interface for the user
+ * @property {string} id - The ID of the user
+ * @property {string} email - The email of the user
+ * @property {string} name - The user's name of the user
+ * @property {UserRole} role - The role of the user
+ * @property {string} accessToken - The access token of the user
+ * @property {string} refreshToken - The refresh token of the user
+ * @property {Date} createdAt - The date and time the user was created
+ * @property {Date} updatedAt - The date and time the user was last updated
+ */
+export interface UserInterface {
+  id: string;
+  email: string;
+  name: string;
+  role: UserRole;
+  accessToken: string;
+  refreshToken: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     AuthLoginResponse:
+ *       allOf:
+ *         - $ref: "#/components/schemas/UserInterface"
+ */
+
+/**
+ * @typedef AuthLoginResponse
+ * @description Login response is the UserInterface object itself.
+ */
+export type AuthLoginResponse = UserInterface;
+
+
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     AuthLogoutPostRequest:
+ *       type: object
+ *       required:
+ *         - userId
+ *       properties:
+ *         userId:
+ *           type: string
+ *           description: The ID of the user
+ *           example: "507f1f77bcf86cd799439011"
+ */
+/**
+ * @interface AuthLogoutPostRequest
+ * @description The request for the logout
+ * @property {string} userId - The ID of the user
+ */
+export interface AuthLogoutPostRequest {
+  userId: string;
 }
 
 /**
@@ -96,7 +222,25 @@ export interface AuthTokenPayload {
   userId: string;
 }
 
-export interface AuthLoginResponse {
-  user: User;
-  token: string;
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     AuthRefreshTokenPostRequest:
+ *       type: object
+ *       required:
+ *         - refreshToken
+ *       properties:
+ *         refreshToken:
+ *           type: string
+ *           description: The refresh token of the user
+ *           example: "1234567890"
+ */
+/**
+ * @interface AuthRefreshTokenPostRequest
+ * @description The request for the refresh token
+ * @property {string} refreshToken - The refresh token of the user
+ */
+export interface AuthRefreshTokenPostRequest {
+  refreshToken: string;
 }

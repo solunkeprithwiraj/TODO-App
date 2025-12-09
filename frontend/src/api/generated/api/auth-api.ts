@@ -22,19 +22,11 @@ import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObj
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, type RequestArgs, BaseAPI, RequiredError, operationServerMap } from '../base';
 // @ts-ignore
-import type { AuthLoginPost200Response } from '../models';
-// @ts-ignore
 import type { AuthLoginPostRequest } from '../models';
 // @ts-ignore
 import type { AuthLogoutPost400Response } from '../models';
 // @ts-ignore
-import type { AuthLogoutPostRequest } from '../models';
-// @ts-ignore
 import type { AuthRefreshTokenPost400Response } from '../models';
-// @ts-ignore
-import type { AuthRefreshTokenPostRequest } from '../models';
-// @ts-ignore
-import type { AuthRegisterPost201Response } from '../models';
 // @ts-ignore
 import type { AuthRegisterPost400Response } from '../models';
 // @ts-ignore
@@ -87,13 +79,13 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
         /**
          * Logs out a user by invalidating their token
          * @summary Logout a user
-         * @param {AuthLogoutPostRequest} authLogoutPostRequest 
+         * @param {object} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        authLogoutPost: async (authLogoutPostRequest: AuthLogoutPostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'authLogoutPostRequest' is not null or undefined
-            assertParamExists('authLogoutPost', 'authLogoutPostRequest', authLogoutPostRequest)
+        authLogoutPost: async (body: object, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'body' is not null or undefined
+            assertParamExists('authLogoutPost', 'body', body)
             const localVarPath = `/auth/logout`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -117,7 +109,7 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(authLogoutPostRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -127,13 +119,13 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
         /**
          * Refreshes a token by generating a new one
          * @summary Refresh a token
-         * @param {AuthRefreshTokenPostRequest} authRefreshTokenPostRequest 
+         * @param {object} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        authRefreshTokenPost: async (authRefreshTokenPostRequest: AuthRefreshTokenPostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'authRefreshTokenPostRequest' is not null or undefined
-            assertParamExists('authRefreshTokenPost', 'authRefreshTokenPostRequest', authRefreshTokenPostRequest)
+        authRefreshTokenPost: async (body: object, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'body' is not null or undefined
+            assertParamExists('authRefreshTokenPost', 'body', body)
             const localVarPath = `/auth/refresh-token`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -157,7 +149,7 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(authRefreshTokenPostRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -220,7 +212,7 @@ export const AuthApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async authLoginPost(authLoginPostRequest: AuthLoginPostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AuthLoginPost200Response>> {
+        async authLoginPost(authLoginPostRequest: AuthLoginPostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.authLoginPost(authLoginPostRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AuthApi.authLoginPost']?.[localVarOperationServerIndex]?.url;
@@ -229,12 +221,12 @@ export const AuthApiFp = function(configuration?: Configuration) {
         /**
          * Logs out a user by invalidating their token
          * @summary Logout a user
-         * @param {AuthLogoutPostRequest} authLogoutPostRequest 
+         * @param {object} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async authLogoutPost(authLogoutPostRequest: AuthLogoutPostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.authLogoutPost(authLogoutPostRequest, options);
+        async authLogoutPost(body: object, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.authLogoutPost(body, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AuthApi.authLogoutPost']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -242,12 +234,12 @@ export const AuthApiFp = function(configuration?: Configuration) {
         /**
          * Refreshes a token by generating a new one
          * @summary Refresh a token
-         * @param {AuthRefreshTokenPostRequest} authRefreshTokenPostRequest 
+         * @param {object} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async authRefreshTokenPost(authRefreshTokenPostRequest: AuthRefreshTokenPostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.authRefreshTokenPost(authRefreshTokenPostRequest, options);
+        async authRefreshTokenPost(body: object, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.authRefreshTokenPost(body, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AuthApi.authRefreshTokenPost']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -259,7 +251,7 @@ export const AuthApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async authRegisterPost(authRegisterPostRequest: AuthRegisterPostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AuthRegisterPost201Response>> {
+        async authRegisterPost(authRegisterPostRequest: AuthRegisterPostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.authRegisterPost(authRegisterPostRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AuthApi.authRegisterPost']?.[localVarOperationServerIndex]?.url;
@@ -281,28 +273,28 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        authLoginPost(authLoginPostRequest: AuthLoginPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<AuthLoginPost200Response> {
+        authLoginPost(authLoginPostRequest: AuthLoginPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
             return localVarFp.authLoginPost(authLoginPostRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * Logs out a user by invalidating their token
          * @summary Logout a user
-         * @param {AuthLogoutPostRequest} authLogoutPostRequest 
+         * @param {object} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        authLogoutPost(authLogoutPostRequest: AuthLogoutPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<void> {
-            return localVarFp.authLogoutPost(authLogoutPostRequest, options).then((request) => request(axios, basePath));
+        authLogoutPost(body: object, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.authLogoutPost(body, options).then((request) => request(axios, basePath));
         },
         /**
          * Refreshes a token by generating a new one
          * @summary Refresh a token
-         * @param {AuthRefreshTokenPostRequest} authRefreshTokenPostRequest 
+         * @param {object} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        authRefreshTokenPost(authRefreshTokenPostRequest: AuthRefreshTokenPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<void> {
-            return localVarFp.authRefreshTokenPost(authRefreshTokenPostRequest, options).then((request) => request(axios, basePath));
+        authRefreshTokenPost(body: object, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.authRefreshTokenPost(body, options).then((request) => request(axios, basePath));
         },
         /**
          * Registers a new user with the given email and password
@@ -311,7 +303,7 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        authRegisterPost(authRegisterPostRequest: AuthRegisterPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<AuthRegisterPost201Response> {
+        authRegisterPost(authRegisterPostRequest: AuthRegisterPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
             return localVarFp.authRegisterPost(authRegisterPostRequest, options).then((request) => request(axios, basePath));
         },
     };
@@ -328,25 +320,25 @@ export interface AuthApiInterface {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    authLoginPost(authLoginPostRequest: AuthLoginPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<AuthLoginPost200Response>;
+    authLoginPost(authLoginPostRequest: AuthLoginPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
 
     /**
      * Logs out a user by invalidating their token
      * @summary Logout a user
-     * @param {AuthLogoutPostRequest} authLogoutPostRequest 
+     * @param {object} body 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    authLogoutPost(authLogoutPostRequest: AuthLogoutPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<void>;
+    authLogoutPost(body: object, options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
     /**
      * Refreshes a token by generating a new one
      * @summary Refresh a token
-     * @param {AuthRefreshTokenPostRequest} authRefreshTokenPostRequest 
+     * @param {object} body 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    authRefreshTokenPost(authRefreshTokenPostRequest: AuthRefreshTokenPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<void>;
+    authRefreshTokenPost(body: object, options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
     /**
      * Registers a new user with the given email and password
@@ -355,7 +347,7 @@ export interface AuthApiInterface {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    authRegisterPost(authRegisterPostRequest: AuthRegisterPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<AuthRegisterPost201Response>;
+    authRegisterPost(authRegisterPostRequest: AuthRegisterPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
 
 }
 
@@ -377,23 +369,23 @@ export class AuthApi extends BaseAPI implements AuthApiInterface {
     /**
      * Logs out a user by invalidating their token
      * @summary Logout a user
-     * @param {AuthLogoutPostRequest} authLogoutPostRequest 
+     * @param {object} body 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public authLogoutPost(authLogoutPostRequest: AuthLogoutPostRequest, options?: RawAxiosRequestConfig) {
-        return AuthApiFp(this.configuration).authLogoutPost(authLogoutPostRequest, options).then((request) => request(this.axios, this.basePath));
+    public authLogoutPost(body: object, options?: RawAxiosRequestConfig) {
+        return AuthApiFp(this.configuration).authLogoutPost(body, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Refreshes a token by generating a new one
      * @summary Refresh a token
-     * @param {AuthRefreshTokenPostRequest} authRefreshTokenPostRequest 
+     * @param {object} body 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public authRefreshTokenPost(authRefreshTokenPostRequest: AuthRefreshTokenPostRequest, options?: RawAxiosRequestConfig) {
-        return AuthApiFp(this.configuration).authRefreshTokenPost(authRefreshTokenPostRequest, options).then((request) => request(this.axios, this.basePath));
+    public authRefreshTokenPost(body: object, options?: RawAxiosRequestConfig) {
+        return AuthApiFp(this.configuration).authRefreshTokenPost(body, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

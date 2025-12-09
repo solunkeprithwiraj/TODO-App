@@ -5,8 +5,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**email** | **string** | The user\&#39;s email address | [default to undefined]
-**password** | **string** | The user\&#39;s password | [default to undefined]
+**email** | **string** | The email of the user | [default to undefined]
+**password** | **string** | The password of the user | [default to undefined]
 
 ## Example
 

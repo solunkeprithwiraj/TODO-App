@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**refreshToken** | **string** | The refresh token | [optional] [default to undefined]
+**refreshToken** | **string** | The refresh token of the user | [default to undefined]
 
 ## Example
 

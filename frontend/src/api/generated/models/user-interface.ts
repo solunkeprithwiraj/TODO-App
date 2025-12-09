@@ -14,22 +14,38 @@
 
 
 
-export interface AuthRegisterPost201ResponseUser {
+export interface UserInterface {
     /**
      * The ID of the user
      */
-    'id'?: string;
+    'id': string;
     /**
      * The email of the user
      */
-    'email'?: string;
+    'email': string;
+    /**
+     * The user\'s name of the user
+     */
+    'name': string;
+    /**
+     * The role of the user
+     */
+    'role': string;
+    /**
+     * The access token of the user
+     */
+    'accessToken': string;
+    /**
+     * The refresh token of the user
+     */
+    'refreshToken': string;
     /**
      * The date and time the user was created
      */
-    'createdAt'?: string;
+    'createdAt': string;
     /**
      * The date and time the user was last updated
      */
-    'updatedAt'?: string;
+    'updatedAt': string;
 }
 

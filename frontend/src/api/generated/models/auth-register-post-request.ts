@@ -16,10 +16,16 @@
 
 export interface AuthRegisterPostRequest {
     /**
-     * The name of the user
+     * The email of the user
      */
-    'name'?: string;
-    'email'?: string;
-    'password'?: string;
+    'email': string;
+    /**
+     * The password of the user
+     */
+    'password': string;
+    /**
+     * The user\'s name of the user
+     */
+    'name': string;
 }
 

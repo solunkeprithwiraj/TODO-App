@@ -13,11 +13,13 @@
  */
 
 
+// May contain unused imports in some cases
+// @ts-ignore
+import type { UserInterface } from './user-interface';
 
-export interface AuthRefreshTokenPostRequest {
-    /**
-     * The refresh token of the user
-     */
-    'refreshToken': string;
-}
+/**
+ * @type AuthLoginResponse
+ */
+export type AuthLoginResponse = UserInterface;
+
 

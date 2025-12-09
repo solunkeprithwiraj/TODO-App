@@ -62,7 +62,7 @@ export default function Signup() {
         setEmail("");
         setPassword("");
         alert(response.data.message);
-        router.push("/login");
+        router.push("/auth?view=login");
       } catch (error: any) {
         console.log("Error", error.response?.data, error);
         if (error.response) {

@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**userId** | **string** | The ID of the user | [optional] [default to undefined]
+**userId** | **string** | The ID of the user | [default to undefined]
 
 ## Example
 

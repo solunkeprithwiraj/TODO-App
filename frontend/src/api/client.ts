@@ -13,8 +13,7 @@ import axiosInstance from "@/lib/axiosInstance";
 const getBaseURL = () => {
   return (
     process.env.NEXT_PUBLIC_API_URL ||
-    process.env.NEXT_PUBLIC_BACKEND_URL ||
-    "http://localhost:5000"
+    "http://localhost:5000/api/v1"
   );
 };
 
@@ -41,9 +40,7 @@ export const api = {
 
 // Re-export types for convenience
 export type {
-  AuthLoginPostRequest,
   AuthLoginPost200Response,
-  AuthRegisterPostRequest,
   AuthRegisterPost201Response,
   AuthLogoutPostRequest,
   AuthRefreshTokenPostRequest,

@@ -13,11 +13,13 @@
  */
 
 
+// May contain unused imports in some cases
+// @ts-ignore
+import type { UserInterface } from './user-interface';
 
-export interface AuthLoginPost200Response {
-    /**
-     * The JWT token for the user
-     */
-    'token'?: string;
-}
+/**
+ * @type AuthRegisterResponse
+ */
+export type AuthRegisterResponse = UserInterface;
+
 

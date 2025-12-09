@@ -1,5 +1,10 @@
 "use client";
 
+import {
+  AuthLoginResponse,
+  AuthRegisterResponse,
+  UserInterface,
+} from "@/api/generated";
 import React, {
   createContext,
   useState,
@@ -7,18 +12,11 @@ import React, {
   useEffect,
   ReactNode,
 } from "react";
-
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  token: string;
-  isAdmin?: boolean;
-}
+import { toast } from "sonner";
 
 interface AuthContextType {
-  user: User | null;
-  login: (userData: User) => void;
+  user: UserInterface | null;
+  login: (userData: AuthLoginResponse) => void;
   logout: () => void;
 }
 
@@ -29,7 +27,7 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<UserInterface | null>(null);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -44,7 +42,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   }, []);
 
-  const login = (userData: User) => {
+  const login = (userData: AuthLoginResponse) => {
     if (typeof window !== "undefined") {
       localStorage.setItem("user", JSON.stringify(userData));
     }

@@ -13,11 +13,11 @@
  */
 
 
-// May contain unused imports in some cases
-// @ts-ignore
-import type { AuthRegisterPost201ResponseUser } from './auth-register-post201-response-user';
 
-export interface AuthRegisterPost201Response {
-    'user'?: AuthRegisterPost201ResponseUser;
+export interface AuthTokenPayload {
+    /**
+     * The ID of the user
+     */
+    'userId': string;
 }
 

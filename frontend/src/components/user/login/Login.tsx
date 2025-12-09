@@ -6,7 +6,9 @@ import { useRouter } from "next/navigation";
 import { useState, FormEvent } from "react";
 import axios from "axios";
 import { useAuth } from "@/context/AuthContext";
-import { api, AuthLoginPostRequest } from "@/api/client";
+import { api } from "@/api/client";
+import { toast } from "sonner";
+import { LoginData } from "@/api/generated";
 
 export default function Login() {
   const [password, setPassword] = useState("");
@@ -43,27 +45,25 @@ export default function Login() {
 
     if (isValid) {
       try {
-        const userData: AuthLoginPostRequest = { email, password };
-
+        const userData: LoginData = { email, password };
+        console.log("waiting for login");
         const response = await api.auth.authLoginPost(userData);
 
         console.log("Login Successful:", response.data);
+        toast.success("Login Successful");
 
-        
-        login(response.data.user);
+        if (response.data.user) {
+          login(response.data.user);
+        } else {
+          toast.error("Login failed");
+        }
 
         setEmail("");
         setPassword("");
-        console.log(response.data.message);
+
         router.push("/");
       } catch (error: any) {
-        console.log("Login Error:", error.response?.data, error);
-        if (error.response) {
-          setServerError(error.response.data.error || "Login failed");
-        } else {
-          setServerError("Server is unreachable");
-        }
-        console.log(error.response?.data?.error || "An error occurred");
+        toast.error(error.response?.data?.message || "Login failed");
       }
     }
   };
@@ -227,7 +227,7 @@ export default function Login() {
               <p className="text-gray-600">
                 Don't have an account?{" "}
                 <Link
-                  href="/signup"
+                  href="/auth?view=signup"
                   className="text-navy hover:text-navy-dark font-semibold transition-colors"
                 >
                   Create one now

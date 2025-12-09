@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import { swaggerSpecs, swaggerUi } from "./config/swagger";
 import authRoutes from "./routes/auth.route";
 import { logger } from "./utils/logger";
+import cors from "cors";
 dotenv.config();
 
 const app: Express = express();
@@ -11,6 +12,12 @@ const app: Express = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL,
+    credentials: true,
+  })
+);
 app.use("/api/v1/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
 
 // Expose Swagger JSON spec
