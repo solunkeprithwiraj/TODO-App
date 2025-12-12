@@ -6,6 +6,7 @@ All URIs are relative to *http://localhost:5000/api/v1*
 |------------- | ------------- | -------------|
 |[**authLoginPost**](#authloginpost) | **POST** /auth/login | Login a user|
 |[**authLogoutPost**](#authlogoutpost) | **POST** /auth/logout | Logout a user|
+|[**authMeGet**](#authmeget) | **GET** /auth/me | Get current user profile|
 |[**authRefreshTokenPost**](#authrefreshtokenpost) | **POST** /auth/refresh-token | Refresh a token|
 |[**authRegisterPost**](#authregisterpost) | **POST** /auth/register | Register a new user|
 
@@ -112,6 +113,53 @@ void (empty response body)
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | User logged out successfully |  -  |
+|**400** | Bad request |  -  |
+|**401** | Unauthorized |  -  |
+|**500** | Internal server error |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **authMeGet**
+> object authMeGet()
+
+Gets the current user profile
+
+### Example
+
+```typescript
+import {
+    AuthApi,
+    Configuration
+} from './api';
+
+const configuration = new Configuration();
+const apiInstance = new AuthApi(configuration);
+
+const { status, data } = await apiInstance.authMeGet();
+```
+
+### Parameters
+This endpoint does not have any parameters.
+
+
+### Return type
+
+**object**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | User profile fetched successfully |  -  |
 |**400** | Bad request |  -  |
 |**401** | Unauthorized |  -  |
 |**500** | Internal server error |  -  |

@@ -26,6 +26,8 @@ import type { AuthLoginPostRequest } from '../models';
 // @ts-ignore
 import type { AuthLogoutPost400Response } from '../models';
 // @ts-ignore
+import type { AuthMeGet400Response } from '../models';
+// @ts-ignore
 import type { AuthRefreshTokenPost400Response } from '../models';
 // @ts-ignore
 import type { AuthRegisterPost400Response } from '../models';
@@ -110,6 +112,40 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Gets the current user profile
+         * @summary Get current user profile
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        authMeGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/auth/me`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -232,6 +268,18 @@ export const AuthApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * Gets the current user profile
+         * @summary Get current user profile
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async authMeGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.authMeGet(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AuthApi.authMeGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Refreshes a token by generating a new one
          * @summary Refresh a token
          * @param {object} body 
@@ -287,6 +335,15 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
             return localVarFp.authLogoutPost(body, options).then((request) => request(axios, basePath));
         },
         /**
+         * Gets the current user profile
+         * @summary Get current user profile
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        authMeGet(options?: RawAxiosRequestConfig): AxiosPromise<object> {
+            return localVarFp.authMeGet(options).then((request) => request(axios, basePath));
+        },
+        /**
          * Refreshes a token by generating a new one
          * @summary Refresh a token
          * @param {object} body 
@@ -332,6 +389,14 @@ export interface AuthApiInterface {
     authLogoutPost(body: object, options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
     /**
+     * Gets the current user profile
+     * @summary Get current user profile
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    authMeGet(options?: RawAxiosRequestConfig): AxiosPromise<object>;
+
+    /**
      * Refreshes a token by generating a new one
      * @summary Refresh a token
      * @param {object} body 
@@ -375,6 +440,16 @@ export class AuthApi extends BaseAPI implements AuthApiInterface {
      */
     public authLogoutPost(body: object, options?: RawAxiosRequestConfig) {
         return AuthApiFp(this.configuration).authLogoutPost(body, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Gets the current user profile
+     * @summary Get current user profile
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public authMeGet(options?: RawAxiosRequestConfig) {
+        return AuthApiFp(this.configuration).authMeGet(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

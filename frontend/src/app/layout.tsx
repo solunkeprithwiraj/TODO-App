@@ -21,8 +21,10 @@ export default function RootLayout({ children }: RootLayoutProps) {
     <html lang="en">
       <body className={inter.className}>
         <Providers>
-          <Navbar />
-          {children}
+          <div className="flex">
+            <Navbar />
+            <main className="flex-1 ml-16 min-h-screen">{children}</main>
+          </div>
           <Toaster />
         </Providers>
       </body>

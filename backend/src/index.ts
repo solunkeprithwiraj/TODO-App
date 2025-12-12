@@ -1,7 +1,8 @@
 import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
 import { swaggerSpecs, swaggerUi } from "./config/swagger";
-import authRoutes from "./routes/auth.route";
+import authRoutes from "./routes/auth/auth.route";
+import taskRoutes from "./routes/tasks/task.route";
 import { logger } from "./utils/logger";
 import cors from "cors";
 dotenv.config();
@@ -27,6 +28,7 @@ app.get("/api/v1/docs.json", (req: Request, res: Response) => {
 });
 
 app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/tasks", taskRoutes);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello World");

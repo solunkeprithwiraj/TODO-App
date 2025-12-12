@@ -46,15 +46,32 @@ export interface AuthRegisterPostRequest {
  * components:
  *   schemas:
  *     AuthRegisterResponse:
- *       allOf:
- *         - $ref: "#/components/schemas/UserInterface"
+ *       type: object
+ *       properties:
+ *         success:
+ *           type: boolean
+ *           description: The success of the response
+ *         message:
+ *           type: string
+ *           description: The message of the response
+ *         data:
+ *           type: object
+ *           properties:
+ *             $ref: "#/components/schemas/UserInterface"
  */
 
 /**
- * @typedef AuthRegisterResponse
+ * @interface AuthRegisterResponse
+ * @description The response for the registration
+ * @property {boolean} success - The success of the response
+ * @property {string} message - The message of the response
+ * @property {UserInterface | undefined} data - The data of the response
  */
-export type AuthRegisterResponse = UserInterface;
-
+export interface AuthRegisterResponse {
+  success: boolean;
+  message: string;
+  data?: UserInterface;
+}
 
 /**
  * @openapi
@@ -165,17 +182,32 @@ export interface UserInterface {
  * components:
  *   schemas:
  *     AuthLoginResponse:
- *       allOf:
- *         - $ref: "#/components/schemas/UserInterface"
+ *       type: object
+ *       properties:
+ *         success:
+ *           type: boolean
+ *           description: The success of the response
+ *         message:
+ *           type: string
+ *           description: The message of the response
+ *         data:
+ *           type: object
+ *           properties:
+ *             $ref: "#/components/schemas/UserInterface"
  */
 
 /**
- * @typedef AuthLoginResponse
- * @description Login response is the UserInterface object itself.
+ * @interface AuthLoginResponse
+ * @description The response for the login
+ * @property {boolean} success - The success of the response
+ * @property {string} message - The message of the response
+ * @property {UserInterface | undefined} data - The data of the response
  */
-export type AuthLoginResponse = UserInterface;
-
-
+export interface AuthLoginResponse {
+  success: boolean;
+  message: string;
+  data?: UserInterface;
+}
 /**
  * @openapi
  * components:

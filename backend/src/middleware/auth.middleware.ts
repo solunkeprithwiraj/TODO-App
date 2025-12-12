@@ -57,7 +57,6 @@ export const authenticate = async (
     }
 
     const { password: _password, ...userWithoutPassword } = user;
-    req.userId = user.id;
     req.user = userWithoutPassword;
 
     next();
@@ -98,7 +97,6 @@ export const optionalAuthenticate = async (
 
           if (user) {
             const { password: _password, ...userWithoutPassword } = user;
-            req.userId = user.id;
             req.user = userWithoutPassword;
           }
         } catch {

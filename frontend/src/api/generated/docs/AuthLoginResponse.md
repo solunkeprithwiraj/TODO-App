@@ -5,14 +5,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **string** | The ID of the user | [default to undefined]
-**email** | **string** | The email of the user | [default to undefined]
-**name** | **string** | The user\&#39;s name of the user | [default to undefined]
-**role** | **string** | The role of the user | [default to undefined]
-**accessToken** | **string** | The access token of the user | [default to undefined]
-**refreshToken** | **string** | The refresh token of the user | [default to undefined]
-**createdAt** | **string** | The date and time the user was created | [default to undefined]
-**updatedAt** | **string** | The date and time the user was last updated | [default to undefined]
+**success** | **boolean** | The success of the response | [optional] [default to undefined]
+**message** | **string** | The message of the response | [optional] [default to undefined]
+**data** | **object** |  | [optional] [default to undefined]
 
 ## Example
 
@@ -20,14 +15,9 @@ Name | Type | Description | Notes
 import { AuthLoginResponse } from './api';
 
 const instance: AuthLoginResponse = {
-    id,
-    email,
-    name,
-    role,
-    accessToken,
-    refreshToken,
-    createdAt,
-    updatedAt,
+    success,
+    message,
+    data,
 };
 ```
 

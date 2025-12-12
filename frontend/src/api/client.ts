@@ -11,14 +11,12 @@ import axiosInstance from "@/lib/axiosInstance";
 
 // Get base URL from environment (matching your axiosInstance config)
 const getBaseURL = () => {
-  return (
-    process.env.NEXT_PUBLIC_API_URL ||
-    "http://localhost:5000/api/v1"
-  );
+  return process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
 };
 
 const baseURL = getBaseURL();
-const basePath = `${baseURL}/api/v1`;
+// basePath should just be the base URL, not duplicated
+const basePath = baseURL;
 
 // Create configuration with base path
 const apiConfiguration = new Configuration({
@@ -32,16 +30,17 @@ const apiConfiguration = new Configuration({
 // Create API instances using your configured axios instance
 // This ensures auth interceptors are applied automatically
 export const authApi = new AuthApi(apiConfiguration, basePath, axiosInstance);
-
+export const tasksApi = new TasksApi(apiConfiguration, basePath, axiosInstance);
 // Export all API instances
 export const api = {
   auth: authApi,
+  tasks: tasksApi,
 };
 
 // Re-export types for convenience
 export type {
-  AuthLoginPost200Response,
-  AuthRegisterPost201Response,
+  AuthLoginResponse,
+  AuthRegisterResponse,
   AuthLogoutPostRequest,
   AuthRefreshTokenPostRequest,
 } from "./generated/models";

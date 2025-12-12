@@ -13,13 +13,16 @@
  */
 
 
-// May contain unused imports in some cases
-// @ts-ignore
-import type { UserInterface } from './user-interface';
 
-/**
- * @type AuthRegisterResponse
- */
-export type AuthRegisterResponse = UserInterface;
-
+export interface AuthRegisterResponse {
+    /**
+     * The success of the response
+     */
+    'success'?: boolean;
+    /**
+     * The message of the response
+     */
+    'message'?: string;
+    'data'?: object;
+}
 

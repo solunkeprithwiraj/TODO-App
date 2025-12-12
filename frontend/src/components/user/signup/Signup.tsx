@@ -5,6 +5,8 @@ import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { api } from "@/api/client";
+import { toast } from "sonner";
 
 export default function Signup() {
   const [name, setName] = useState("");
@@ -47,34 +49,15 @@ export default function Signup() {
     if (isValid) {
       try {
         const userData = { name, email, password };
-        const apiUrl =
-          process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
-        const response = await axios.post(
-          `${apiUrl}/api/user/signup`,
-          userData
-        );
 
-        console.log("userData", userData);
-        if (typeof window !== "undefined") {
-          localStorage.setItem("user", JSON.stringify(response.data));
-        }
+        const response = await api.auth.authRegisterPost(userData);
+        toast.success("Account created successfully");
         setName("");
         setEmail("");
         setPassword("");
-        alert(response.data.message);
         router.push("/auth?view=login");
       } catch (error: any) {
-        console.log("Error", error.response?.data, error);
-        if (error.response) {
-          if (error.response.status === 400) {
-            setServerError(error.response.data.error);
-          } else {
-            setServerError("An error occurred while signing up");
-          }
-        } else {
-          setServerError("Server is unreachable");
-        }
-        alert(error.response?.data?.error || "An error occurred");
+        toast.error(error.response?.data?.error || "An error occurred");
       }
     }
   };

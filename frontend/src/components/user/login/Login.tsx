@@ -8,7 +8,11 @@ import axios from "axios";
 import { useAuth } from "@/context/AuthContext";
 import { api } from "@/api/client";
 import { toast } from "sonner";
-import { LoginData } from "@/api/generated";
+import {
+  AuthLoginPostRequest,
+  AuthLoginResponse,
+  UserInterface,
+} from "@/api/generated";
 
 export default function Login() {
   const [password, setPassword] = useState("");
@@ -45,17 +49,18 @@ export default function Login() {
 
     if (isValid) {
       try {
-        const userData: LoginData = { email, password };
-        console.log("waiting for login");
+        const userData: AuthLoginPostRequest = { email, password };
         const response = await api.auth.authLoginPost(userData);
 
-        console.log("Login Successful:", response.data);
         toast.success("Login Successful");
 
-        if (response.data.user) {
-          login(response.data.user);
+        const user = response.data as AuthLoginResponse;
+        console.log("user data", user);
+        const userLoginResponse = user?.data as UserInterface;
+        if (userLoginResponse) {
+          login(userLoginResponse);
         } else {
-          toast.error("Login failed");
+          console.log("Login failed");
         }
 
         setEmail("");

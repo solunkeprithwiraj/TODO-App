@@ -1,12 +1,12 @@
 import { Router } from "express";
-import AuthController from "../controller/auth/auth.controller";
+import AuthController from "../../controller/auth/auth.controller";
 import {
   validateLogin,
   validateLogout,
   validateRefreshToken,
   validateRegister,
-} from "../validators/auth.validator";
-import { authenticate } from "../middleware/auth.middleware";
+} from "../../validators/auth.validator";
+import { authenticate } from "../../middleware/auth.middleware";
 
 const router = Router();
 const authController = new AuthController();
@@ -203,5 +203,49 @@ router.post(
   authenticate,
   authController.refreshToken
 );
+
+/**
+ * @openapi
+ * /auth/me:
+ *   security:
+ *     - bearerAuth: []
+ *   get:
+ *     tags:
+ *       - Auth
+ *     summary: Get current user profile
+ *     description: Gets the current user profile
+ *     responses:
+ *       200:
+ *        description: User profile fetched successfully
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                $ref: '#/components/schemas/AuthLoginResponse'
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: The error message
+ *       400:
+ *         description: Bad request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: The error message when user is not authenticated
+ */
+router.get("/me", authenticate, authController.getUserProfile);
 
 export default router;

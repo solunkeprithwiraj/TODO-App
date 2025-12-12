@@ -1,128 +1,123 @@
-import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
-import { errorResponse, successResponse } from "../../utils/response.util";
+import { AuthRepository } from "@/domain/auth/AuthRepository";
 import {
-  AuthTokenPayload,
-  AuthRegisterPostRequest,
+  generateAccessToken,
+  generateRefreshToken,
+  verifyToken,
+} from "../../utils/token.util";
+import { successResponse, errorResponse } from "../../utils/response.util";
+import {
   AuthLoginPostRequest,
-} from "../../interfaces/auth.interface";
-import { logger } from "../../utils/logger";
+  AuthRefreshTokenPostRequest,
+  AuthRegisterPostRequest,
+} from "@/interfaces/auth.interface";
 
 export class AuthService {
-  private prisma = new PrismaClient({});
-
-  private JWT_SECRET: string =
-    process.env.JWT_SECRET || "your-secret-key-change-in-production";
+  constructor(private repo: AuthRepository) {}
 
   async register(data: AuthRegisterPostRequest) {
     const { email, password, name } = data;
-    logger.info("Registering user", data);
-    const existingUser = await this.prisma.user.findUnique({
-      where: { email },
-    });
-    if (existingUser) {
-      return errorResponse("User with this email already exists");
+
+    const existing = await this.repo.findByEmail(email);
+    if (existing) {
+      return errorResponse("User already exists");
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = await this.prisma.user.create({
-      data: { email, password: hashedPassword, name },
+
+    const user = await this.repo.createUser({
+      email,
+      password: hashedPassword,
+      name,
     });
 
-    const accessToken = jwt.sign({ userId: user.id }, this.JWT_SECRET, {
-      expiresIn: "1h",
-    });
-    const refreshToken = jwt.sign({ userId: user.id }, this.JWT_SECRET, {
-      expiresIn: "7d",
+    const accessToken = generateAccessToken(user.id);
+    const refreshToken = generateRefreshToken(user.id);
+
+    await this.repo.updateTokens(user.id, {
+      accessToken,
+      refreshToken,
+      accessTokenExpiresAt: new Date(Date.now() + 1 * 3600 * 1000),
+      refreshTokenExpiresAt: new Date(Date.now() + 7 * 24 * 3600 * 1000),
     });
 
-    const updatedUser = await this.prisma.user.update({
-      where: { id: user.id },
-      data: {
-        accessToken: accessToken as string | null,
-        refreshToken: refreshToken as string | null,
-        accessTokenExpiresAt: new Date(Date.now() + 1 * 60 * 60 * 1000),
-        refreshTokenExpiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-      },
-    });
-
-    const { password: _, ...userWithoutPassword } = updatedUser;
-    return successResponse("register successful", userWithoutPassword);
+    delete (user as any).password;
+    const userData = {
+      ...user,
+      accessToken,
+      refreshToken,
+    };
+    return successResponse("User registered successfully", userData);
   }
 
   async login(data: AuthLoginPostRequest) {
     const { email, password } = data;
-    const user = await this.prisma.user.findUnique({
-      where: { email },
-    });
-    if (!user) {
-      return errorResponse("user does not exist");
-    }
+    const user = await this.repo.findByEmail(email);
+    if (!user) return errorResponse("User not found");
 
-    if (!user.password) {
-      return errorResponse("password is not set");
-    }
+    const valid = await bcrypt.compare(password, user.password!);
+    if (!valid) return errorResponse("Invalid password");
 
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid) {
-      return errorResponse("invalid password");
-    }
+    const accessToken = generateAccessToken(user.id);
+    const refreshToken = generateRefreshToken(user.id);
 
-    const accessToken = jwt.sign({ userId: user.id }, this.JWT_SECRET, {
-      expiresIn: "1h",
-    });
-    const refreshToken = jwt.sign({ userId: user.id }, this.JWT_SECRET, {
-      expiresIn: "7d",
+    await this.repo.updateTokens(user.id, {
+      accessToken,
+      refreshToken,
+      accessTokenExpiresAt: new Date(Date.now() + 1 * 3600 * 1000),
+      refreshTokenExpiresAt: new Date(Date.now() + 7 * 24 * 3600 * 1000),
     });
 
-    await this.prisma.user.update({
-      where: { id: user.id },
-      data: {
-        accessToken: accessToken as string | null,
-        refreshToken: refreshToken as string | null,
-        accessTokenExpiresAt: new Date(Date.now() + 1 * 60 * 60 * 1000),
-        refreshTokenExpiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-      },
-    });
+    delete (user as any).password;
+    const userData = {
+      ...user,
+      accessToken,
+      refreshToken,
+    };
 
-    const { password: _password, ...userWithoutPassword } = user;
-
-    return successResponse("login successful", userWithoutPassword);
+    return successResponse("Login successful", userData);
   }
 
   async logout(userId: string) {
-    await this.prisma.user.update({
-      where: { id: userId },
-      data: {
-        accessToken: null,
-        refreshToken: null,
-        accessTokenExpiresAt: null,
-        refreshTokenExpiresAt: null,
-      },
-    });
-
+    await this.repo.clearTokens(userId);
     return successResponse("Logout successful", null);
   }
 
-  async refreshToken(refreshToken: string) {
-    const decoded = jwt.verify(refreshToken, this.JWT_SECRET);
-    const userId = (decoded as AuthTokenPayload).userId;
-    const user = await this.prisma.user.findUnique({
-      where: { id: userId },
-    });
-    if (!user) {
-      return errorResponse("User not found");
+  async refreshToken(data: AuthRefreshTokenPostRequest) {
+    const { refreshToken } = data;
+    let decoded: any;
+
+    try {
+      decoded = verifyToken(refreshToken);
+    } catch {
+      return errorResponse("Invalid token");
     }
-    if (user.refreshTokenExpiresAt && user.refreshTokenExpiresAt < new Date()) {
-      return errorResponse("Refresh token expired");
-    }
-    const accessToken = jwt.sign({ userId }, this.JWT_SECRET, {
-      expiresIn: "1h",
+
+    const user = await this.repo.findById(decoded.userId);
+    if (!user) return errorResponse("User not found");
+
+    const newAccessToken = generateAccessToken(user.id);
+    const newRefreshToken = generateRefreshToken(user.id);
+
+    await this.repo.updateTokens(user.id, {
+      accessToken: newAccessToken,
+      refreshToken: newRefreshToken,
+      accessTokenExpiresAt: new Date(Date.now() + 1 * 3600 * 1000),
+      refreshTokenExpiresAt: new Date(Date.now() + 7 * 24 * 3600 * 1000),
     });
-    return successResponse("Refresh token successful", {
-      accessToken,
-      refreshToken,
+
+    return successResponse("Token refreshed successfully", {
+      accessToken: newAccessToken,
+      refreshToken: newRefreshToken,
     });
+  }
+
+  async profile(userId: string) {
+    const user = await this.repo.findById(userId);
+    if (!user) return errorResponse("User not found");
+
+    delete (user as any).password;
+
+    return successResponse("Profile retrieved successfully", user);
   }
 }

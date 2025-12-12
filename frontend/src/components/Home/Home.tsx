@@ -24,6 +24,7 @@ export default function Home() {
   const particles = useRef<Particle[]>([]);
   const particleIdCounter = useRef(0);
   const particleCount = 30; // Number of particles
+  console.log("user", user);
 
   useEffect(() => {
     setMounted(true);
@@ -186,7 +187,7 @@ export default function Home() {
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
               <Link
-                href="/todo"
+                href="/tasks"
                 className="px-8 py-4 bg-navy text-white font-semibold rounded-lg shadow-sm hover:bg-navy-light hover:shadow-md transition-all duration-200 flex items-center gap-2"
               >
                 Get Started
@@ -309,7 +310,7 @@ export default function Home() {
               </div>
               <div className="flex justify-center">
                 <Link
-                  href="/todo"
+                  href="/tasks"
                   className="px-8 py-4 bg-navy text-white font-semibold rounded-lg shadow-sm hover:bg-navy-light hover:shadow-md transition-all duration-200"
                 >
                   View My Todos
